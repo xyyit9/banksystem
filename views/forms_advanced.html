@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="Xenon Boostrap Admin Panel" />
+	<meta name="author" content="" />
+	
+	<title>取款业务</title>
+
+	<link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
+	<link rel="stylesheet" href="assets/css/fonts/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/css/bootstrap.css">
+	<link rel="stylesheet" href="assets/css/xenon-core.css">
+	<link rel="stylesheet" href="assets/css/xenon-forms.css">
+	<link rel="stylesheet" href="assets/css/xenon-components.css">
+	<link rel="stylesheet" href="assets/css/xenon-skins.css">
+	<link rel="stylesheet" href="assets/css/custom.css">
+
+	<script src="assets/js/jquery-1.11.1.min.js"></script>
+
+
+</head>
+<body class="page-body">
+	<div class="page-container">
+		<div class="main-content" id="main-content">
+			<div id="main-container">
+			<div class="page-title">
+				
+				<div class="title-env">
+					<h1 class="title">取款业务</h1>
+				</div>
+				
+					<div class="breadcrumb-env">
+					
+								<ol class="breadcrumb bc-1">
+									<li>
+							<a href="dashboard-1.html"><i class="fa-home"></i>Home</a>
+						</li>
+								<li>
+						
+										<a href="forms-native.html">Forms</a>
+								</li>
+							<li class="active">
+						
+										<strong>Advanced Plugins</strong>
+								</li>
+								</ol>
+								
+				</div>
+					
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						</div>
+						<div class="panel-body">
+							<form role="form" class="form-horizontal" id="sign">
+								<div class="form-group">
+									<label class="col-sm-3 control-label" >身份证号码</label>
+									
+									<div class="col-sm-7">
+										
+										<script type="text/javascript">
+											jQuery(document).ready(function($)
+											{
+												var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming' ]
+												
+												var substringMatcher = function(strs) 
+												{
+													return function findMatches(q, cb) 
+													{
+														var matches, substrRegex;
+														matches = [];
+														substrRegex = new RegExp(q, 'i');
+														
+														$.each(strs, function(i, str) 
+														{
+															if (substrRegex.test(str)) 
+															{
+																matches.push({ value: str });
+															}
+														});
+													 
+														cb(matches);
+													};
+												};
+												
+												$("#typeahead-1").typeahead({
+													hint: true,
+													highlight: true,
+													minLength: 1
+												}, 
+												{
+													name: 'states', 
+													displayKey: 'value', 
+													source: substringMatcher(states)
+												})
+												.bind('typeahead:opened', function()
+												{
+													$(this).data('ttTypeahead').dropdown.$menu.addClass('overflow-hidden').perfectScrollbar();
+												})
+												.on('keyup', function()
+												{
+													$(this).data('ttTypeahead').dropdown.$menu.perfectScrollbar('update');
+												});
+												
+											});
+										</script>
+										
+										<div class="input-group">
+											<input type="text" class="form-control" id="typeahead-1" />						
+											<span class="input-group-addon">
+												<i class="fa-globe"></i>
+											</span>
+										</div>
+										
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label" >姓名</label>
+									
+									<div class="col-sm-7">
+									
+										<script type="text/javascript">
+											jQuery(document).ready(function($)
+											{
+												var names = new Bloodhound({
+													datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+													queryTokenizer: Bloodhound.tokenizers.whitespace,
+													limit: 10,
+													prefetch: {
+														url: 'data/names.json',
+														filter: function(list) 
+														{
+															return $.map(list, function(name) { return { name: name }; });
+														}
+													}
+												});
+												
+												names.initialize();
+												
+												$('#typeahead-2').typeahead(null, {
+													name: 'names',
+													displayKey: 'name',
+													source: names.ttAdapter()
+												});
+											});
+										</script>
+										
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa-user"></i>
+											</span>
+											<input type="text" class="form-control" id="typeahead-2" placeholder="Enter your name" />
+										</div>
+										
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label" >取款总额</label>
+									
+									<div class="col-sm-7">
+									
+										<script type="text/javascript">
+											jQuery(document).ready(function($)
+											{	
+												var name_randomizer = new Bloodhound({
+													datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+													queryTokenizer: Bloodhound.tokenizers.whitespace,
+													// You can also prefetch suggestions
+													// prefetch: 'data/typeahead-generate.php',
+													remote: 'data/typeahead-generate.php?q=%QUERY'
+												});
+												
+												name_randomizer.initialize();
+												
+												$('#typeahead-3').typeahead({
+													hint: true,
+													highlight: true
+												}, {
+													name: 'string-randomizer',
+													displayKey: 'value',
+													source: name_randomizer.ttAdapter()
+												});
+											});
+										</script>
+										
+										<input type="text" class="form-control" id="typeahead-3"  />
+										
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-3">取款的账号类型</label>
+
+									<!--<script type="text/javascript">-->
+                                        <!--jQuery(document).ready(function($)-->
+                                        <!--{-->
+                                            <!--$("#s2example").select2({-->
+                                                <!--placeholder: '请选择-&#45;&#45;',-->
+                                                <!--allowClear: true-->
+                                            <!--}).on('select2-open', function()-->
+                                            <!--{-->
+                                                <!--// Adding Custom Scrollbar-->
+                                                <!--$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();-->
+                                            <!--});-->
+
+                                        <!--});-->
+									<!--</script>-->
+									<div class="col-sm-7">
+									<select class="form-control" id="s2example" tabindex="-1" title="">
+										<option>普通账户</option>
+										<option>外币现钞账户</option>
+										<option>外币现汇账户</option>
+								</select>
+							</div>
+
+								</div>
+								<div class="form-group">
+									<label class="control-label  col-sm-3" >币种</label>
+
+									<!--<script type="text/javascript">-->
+                                        <!--jQuery(document).ready(function($)-->
+                                        <!--{-->
+                                            <!--$("#s2example-2").select2({-->
+                                                <!--placeholder: '请选择-&#45;&#45;',-->
+                                                <!--allowClear: true-->
+                                            <!--}).on('select2-open', function()-->
+                                            <!--{-->
+                                                <!--// Adding Custom Scrollbar-->
+                                                <!--$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();-->
+                                            <!--});-->
+
+                                        <!--});-->
+									<!--</script>-->
+							<div class="col-sm-7">
+									<select class="form-control" id="s2example-2" tabindex="-1" title="">
+										<option>人民币</option>
+										<option>美元</option>
+										<option>港币</option>
+										<option>日元</option>
+										<option>欧元</option>
+										<option>英镑</option>
+										<option>瑞士法郎</option>
+										<option>澳大利亚元</option>
+										<option>新加坡元</option>
+										<option>加拿大元</option>
+									</select>
+							</div>
+								</div>
+								<div class="form-group">
+										<div class="col-sm-3" ></div>
+										<div class="col-sm-9">
+										<button type="submit" class="btn btn-success" >确认取款</button>
+										<button type="reset" class="btn btn-white">取消</button>
+										</div>
+									</div>
+							</form>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+		</div></div>
+	</div>
+		<!-- Imported styles on this page -->
+	<link rel="stylesheet" href="assets/js/daterangepicker/daterangepicker-bs3.css">
+	<link rel="stylesheet" href="assets/js/select2/select2.css">
+	<link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
+	<link rel="stylesheet" href="assets/js/multiselect/css/multi-select.css">
+
+	<!-- Bottom Scripts -->
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/TweenMax.min.js"></script>
+	<script src="assets/js/resizeable.js"></script>
+	<script src="assets/js/joinable.js"></script>
+	<script src="assets/js/xenon-api.js"></script>
+	<script src="assets/js/xenon-toggles.js"></script>
+	<script src="assets/js/moment.min.js"></script>
+
+
+	<!-- Imported scripts on this page -->
+	<script src="assets/js/daterangepicker/daterangepicker.js"></script>
+	<script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
+	<script src="assets/js/timepicker/bootstrap-timepicker.min.js"></script>
+	<script src="assets/js/colorpicker/bootstrap-colorpicker.min.js"></script>
+	<script src="assets/js/select2/select2.min.js"></script>
+	<script src="assets/js/jquery-ui/jquery-ui.min.js"></script>
+	<script src="assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+	<script src="assets/js/tagsinput/bootstrap-tagsinput.min.js"></script>
+	<script src="assets/js/typeahead.bundle.js"></script>
+	<script src="assets/js/handlebars.min.js"></script>
+	<script src="assets/js/multiselect/js/jquery.multi-select.js"></script>
+
+
+	<!-- JavaScripts initializations and stuff -->
+	<script src="assets/js/xenon-custom.js"></script>
+	<script type="text/javascript">
+        $('#sign').submit(function() {
+                var AjaxURL= "/saving/addDeposit";
+                alert($('#sign').serialize());
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: AjaxURL,
+                    data: $('#sign').serialize(),
+                    success: function (data) {
+                        if(data.success){
+                            var strresult=data;
+                            alert("取款成功："+strresult);
+						}else{
+                            alert("取款失败:"+data.responseText);
+						}
+                    },
+                    error: function(data) {
+                        alert("error:"+data.responseText);
+                    }
+                });
+            }
+        );
+
+	</script>
+
+</body>
+</html>
